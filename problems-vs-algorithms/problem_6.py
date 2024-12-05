@@ -14,17 +14,19 @@ works correctly.
 from typing import Optional
 
 def get_min_max(ints: list[int]) -> Optional[tuple[int, int]]:
-    """
-    Return a tuple(min, max) out of list of unsorted integers.
-    
-    Args:
-    ints (list[int]): list of integers containing one or more integers
 
-    Returns:
-    Optional[tuple[int, int]]: A tuple containing the minimum and maximum 
-    integer, or None if the list is empty
-    """
-    pass
+    if ints == None or len(ints) ==0:
+        return
+    min_num = ints[0]
+    max_num = ints[0]
+    for i in range(len(ints)):
+        if ints[i] < min_num:
+            min_num = ints[i]
+        elif ints[i] > max_num:
+            max_num = ints[i]
+    return (min_num,max_num)
+
+
 
 if __name__ == '__main__':
     # Edge case: Empty input list

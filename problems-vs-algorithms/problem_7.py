@@ -21,108 +21,58 @@ add additional test cases to verify that your algorithm works correctly.
 from typing import Optional
 
 class RouteTrieNode:
-    """
-    A node in the RouteTrie, representing a part of a route.
-
-    Attributes:
-    children (dict): A dictionary mapping part of the route to the corresponding RouteTrieNode.
-    handler (Optional[str]): The handler associated with this node, if any.
-    """
     def __init__(self):
-        """
-        Initialize a RouteTrieNode with an empty dictionary for children and no handler.
-        """
-        pass
+        self.children = {}
+        self.handler = None
 
 class RouteTrie:
-    """
-    A trie (prefix tree) for storing routes and their handlers.
-
-    Attributes:
-    root (RouteTrieNode): The root node of the trie.
-    """
     def __init__(self, root_handler: str):
-        """
-        Initialize the RouteTrie with a root handler.
-
-        Args:
-        root_handler (str): The handler for the root node.
-        """
-        pass
+        self.root = RouteTrieNode()
+        self.root_handler = root_handler
 
     def insert(self, path_parts: list[str], handler: str) -> None:
-        """
-        Insert a route and its handler into the trie.
+        curr_node = self.root
+        for path in path_parts:
+            if path not in curr_node.children:
+                curr_node.children[path] = RouteTrieNode()
+            curr_node = curr_node.children[path]
+        curr_node.handler = handler
 
-        Args:
-        path_parts (list[str]): A list of parts of the route.
-        handler (str): The handler for the route.
-        """
-        pass
 
     def find(self, path_parts: list[str]) ->  Optional[str]:
-        """
-        Find the handler for a given route.
+        curr_node = self.root
+        for path in path_parts:
+            if path not in curr_node.children:
+                return None
+            curr_node = curr_node.children[path]
 
-        Args:
-        path_parts (list[str]): A list of parts of the route.
-
-        Returns:
-        str or None: The handler for the route if found, otherwise None.
-        """
-        pass
+        return curr_node.handler
 
 class Router:
-    """
-    A router to manage routes and their handlers using a RouteTrie.
-
-    Attributes:
-    route_trie (RouteTrie): The trie used to store routes and handlers.
-    not_found_handler (str): The handler to return when a route is not found.
-    """
     def __init__(self, root_handler: str, not_found_handler: str):
-        """
-        Initialize the Router with a root handler and a not-found handler.
 
-        Args:
-        root_handler (str): The handler for the root route.
-        not_found_handler (str): The handler for routes that are not found.
-        """
-        pass
+        self.root_trie = RouteTrie(root_handler)
+        self.not_found_handler = not_found_handler
+
 
     def add_handler(self, path: str, handler: str) -> None:
-        """
-        Add a handler for a route.
 
-        Args:
-        path (str): The route path.
-        handler (str): The handler for the route.
-        """
-        pass
+        path_parts = self.split_path(path)
+        self.root_trie.insert(path_parts,handler)
 
     def lookup(self, path: str) -> str:
-        """
-        Look up a route and return the associated handler.
 
-        Args:
-        path (str): The route path.
-
-        Returns:
-        str: The handler for the route if found, otherwise the not-found handler.
-        """
+        if path == '/':
+            return self.root_trie.root_handler
+        path_parts = self.split_path(path)
+        handler = self.root_trie.find(path_parts)
+        return handler if handler else self.not_found_handler
         pass
 
     def split_path(self, path: str) -> list[str]:
-        """
-        Split the path into parts and remove empty parts to handle trailing slashes.
 
-        Args:
-            path (str): The path to split.
+        return [part for part in path.split("/") if part]
 
-        Returns:
-            List[str]: A list of parts of the path.
-        """
-        pass
 
 if __name__ == '__main__':
     # create the router and add a route
@@ -133,7 +83,6 @@ if __name__ == '__main__':
     print(router.lookup(""))
     # Expected output: 'not found handler'
 
-    # Normal case: Path not found
     print(router.lookup("/home/contact"))
     # Expected output: 'not found handler'
 

@@ -10,4 +10,4 @@ data structure? Additionally, discuss the efficiency of your solution in terms
 of time and space complexity. If necessary, you can support your explanation 
 with code snippets or mathematical formulas. For guidance on how to write 
 formulas in markdown, refer to https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/writing-mathematical-expressions.
--->
+-->Traversing array once and comparing value to initial min and max would return result values in one traversal as required a linear search with time complexity O(n)
